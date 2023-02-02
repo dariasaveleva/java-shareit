@@ -11,7 +11,8 @@ public class ItemMapper {
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable()
-        ); }
+        );
+    }
 
     public static Item toItem(ItemDto itemDto, long userId) {
         return new Item(

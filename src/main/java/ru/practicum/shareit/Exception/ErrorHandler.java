@@ -16,6 +16,7 @@ public class ErrorHandler {
         log.warn("409 {}", e.getMessage(), e);
         return new ErrorResponse("Ошибка валидации 409", e.getMessage());
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerNotFoundException(final NotFoundException e) {

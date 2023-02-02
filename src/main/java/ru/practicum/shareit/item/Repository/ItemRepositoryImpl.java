@@ -61,7 +61,8 @@ public class ItemRepositoryImpl implements ItemRepository {
         items.compute(userId, (id, userItems) -> {
             if (userItems == null) {
                 userItems = new ArrayList<>();
-            } userItems.add(item);
+            }
+            userItems.add(item);
             return userItems;
         });
         return ItemMapper.toItemDto(item);

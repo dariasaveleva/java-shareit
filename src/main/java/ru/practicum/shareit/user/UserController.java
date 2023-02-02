@@ -28,6 +28,7 @@ public class UserController {
     public User getUserById(@PathVariable long userId) {
         return service.getUserById(userId);
     }
+
     @PostMapping()
     public UserDto createUser(@Validated(Create.class)
                               @RequestBody UserDto userDto) {
@@ -35,9 +36,7 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public UserDto updateUser (@PathVariable long userId,
-                               @Validated(Update.class)
-                               @RequestBody UserDto userDto) {
+    public UserDto updateUser (@PathVariable long userId, @Validated(Update.class) @RequestBody UserDto userDto) {
         return service.updateUser(userId,userDto);
     }
 

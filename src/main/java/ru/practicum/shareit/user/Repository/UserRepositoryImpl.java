@@ -37,13 +37,11 @@ public class UserRepositoryImpl implements UserRepository {
             if (userDto.getName() != null) users.get(userId).setName(userDto.getName());
             if (userDto.getEmail() != null) users.get(userId).setEmail(userDto.getEmail());
             return UserMapper.toUserDto(users.get(userId));
-        } throw new NotFoundException("Пользователь не существует.");
+        } else throw new NotFoundException("Пользователь не существует.");
     }
 
     @Override
     public void delete(long userId) {
-        if (users.containsKey(userId)) {
             users.remove(userId);
-        }
     }
 }

@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto updateUser(long userId, UserDto userDto) {
-        if(userDto.getEmail() != null) checkUserExistence(userDto.getEmail());
+        if (userDto.getEmail() != null) checkUserExistence(userDto.getEmail());
         log.info("Пользователь обновлён");
         return userRepository.updateUser(userId, userDto);
     }

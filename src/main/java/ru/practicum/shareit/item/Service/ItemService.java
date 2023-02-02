@@ -11,7 +11,7 @@ public interface ItemService {
 
     ItemDto getItemById(long itemId);
 
-    List<ItemDto> getAllItemsByUser(long userId);
+    List <ItemDto> getAllItemsByUser(long userId);
 
     List <ItemDto> searchItem(String text);
 }

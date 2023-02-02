@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 

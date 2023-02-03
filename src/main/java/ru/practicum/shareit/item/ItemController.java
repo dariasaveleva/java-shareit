@@ -19,9 +19,10 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService service;
+    private final String header = "X-Sharer-User-Id";
 
     @GetMapping
-    public List<ItemDto> findAll(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public List<ItemDto> findAll(@RequestHeader(header) long userId) {
         return service.getAllItemsByUser(userId);
     }
 
@@ -36,12 +37,12 @@ public class ItemController {
     }
 
     @PostMapping()
-    public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") long userId, @Validated(Create.class) @RequestBody ItemDto itemDto) {
+    public ItemDto createItem(@RequestHeader(header) long userId, @Validated(Create.class) @RequestBody ItemDto itemDto) {
         return service.createItem(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long itemId,@RequestBody ItemDto itemDto) {
+    public ItemDto updateItem(@RequestHeader(header) long userId, @PathVariable long itemId,@RequestBody ItemDto itemDto) {
         return service.updateItem(userId, itemId, itemDto);
     }
 }

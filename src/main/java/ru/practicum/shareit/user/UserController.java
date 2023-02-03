@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.Service.UserService;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -32,8 +33,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserDto createUser(@Validated(Create.class)
-                              @RequestBody UserDto userDto) {
+    public UserDto createUser(@Valid @RequestBody UserDto userDto) {
         return service.createUser(userDto);
     }
 

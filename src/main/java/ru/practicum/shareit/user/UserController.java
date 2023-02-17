@@ -1,6 +1,8 @@
 package ru.practicum.shareit.user;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,17 +20,18 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserController {
 
-    private final UserService service;
+     final UserService service;
 
     @GetMapping
-    public List<User> findAll() {
+    public List<UserDto> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable long userId) {
+    public UserDto getUserById(@PathVariable long userId) {
         return service.getUserById(userId);
     }
 
@@ -38,7 +41,8 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public UserDto updateUser(@PathVariable long userId, @Validated(Update.class) @RequestBody UserDto userDto) {
+    public UserDto updateUser(@PathVariable long userId,
+                              @Validated(Update.class) @RequestBody UserDto userDto) {
         return service.updateUser(userId,userDto);
     }
 

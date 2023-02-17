@@ -5,26 +5,25 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "ITEMS")
-public class Item {
+@Table(name = "COMMENTS")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-    String name;
-    String description;
-    @Column(name = "AVAILABLE")
-    Boolean available;
+    Long id;
+    String text;
     @ManyToOne
-    @JoinColumn(name = "OWNER_ID")
-    User owner;
+    @JoinColumn(name = "item_id")
+    Item item;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
+    LocalDateTime created;
 }

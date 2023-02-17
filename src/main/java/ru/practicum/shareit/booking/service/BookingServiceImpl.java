@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookingServiceImpl implements BookingService{
+public class BookingServiceImpl implements BookingService {
 
     final UserRepository userRepository;
      final BookingRepository bookingRepository;

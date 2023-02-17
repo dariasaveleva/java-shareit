@@ -8,8 +8,9 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.List;
 
 @Repository
-public interface ItemRepository extends JpaRepository<Item, Long>{
+public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByOwnerIdOrderByIdAsc(long userId);
+
     @Query("select item from Item item " +
             "where item.available = true " +
             "and (lower(item.name) like %?1% " +

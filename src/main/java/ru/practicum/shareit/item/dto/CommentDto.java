@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentDto {
-     long id;
+     Long id;
      @NotNull(groups = Create.class)
      @NotBlank(groups = Create.class)
      @Size(min = 10, max = 240)
      String text;
-     String userName;
+     String authorName;
      LocalDateTime created;
 
 }

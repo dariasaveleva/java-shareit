@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
-import ru.practicum.shareit.Exception.UnsupportedStatusException;
+import ru.practicum.shareit.Exception.UnsupportedStateException;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 
@@ -15,6 +15,6 @@ public interface BookingService {
 
     List<BookingDtoResponse> getByBooker(long userId, String state);
 
-    List<BookingDtoResponse> getByOwner(long userId, String state) throws UnsupportedStatusException;
+    List<BookingDtoResponse> getByOwner(long userId, String state) throws UnsupportedStateException;
 
 }

@@ -38,7 +38,7 @@ public class ItemController {
         return service.searchItem(text);
     }
 
-    @PostMapping()
+    @PostMapping
     public ItemDto createItem(@RequestHeader(header) long userId,
                               @Validated(Create.class) @RequestBody ItemDto itemDto) {
         return service.createItem(userId, itemDto);

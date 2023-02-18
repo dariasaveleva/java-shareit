@@ -1,12 +1,10 @@
 package ru.practicum.shareit.item.Service;
 
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Exception.BadRequestException;
 import ru.practicum.shareit.Exception.NotFoundException;
 import ru.practicum.shareit.booking.BookingMapper;
@@ -35,12 +33,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class ItemServiceImpl implements ItemService {
-     final CommentRepository commentRepository;
-     final BookingRepository bookingRepository;
-     final ItemRepository itemRepository;
-     final UserRepository userRepository;
+     private final CommentRepository commentRepository;
+     private final BookingRepository bookingRepository;
+     private final ItemRepository itemRepository;
+     private final UserRepository userRepository;
 
     @Override
     @Transactional
@@ -106,7 +104,7 @@ public class ItemServiceImpl implements ItemService {
                 new NotFoundException("Пользователь не найден"));
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException("Объект не найден"));
-        bookingRepository.findByBookerIdAndItemIdAndFinishTimeBefore(userId, itemId, LocalDateTime.now())
+        bookingRepository.findByBookerIdAndItemIdAndEndBefore(userId, itemId, LocalDateTime.now())
                 .orElseThrow(() -> new BadRequestException("Невозможно добавить коммент"));
         commentDto.setCreated(LocalDateTime.now());
         Comment comment = CommentMapper.toComment(user, item, commentDto);

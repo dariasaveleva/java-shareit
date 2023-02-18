@@ -12,11 +12,12 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingDtoResponse {
     Long id;
-    LocalDateTime startTime;
-    LocalDateTime finishTime;
+    LocalDateTime start;
+    LocalDateTime end;
     Item item;
     User booker;
     BookingStatus status;

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.Exception.NotFoundException;
-import ru.practicum.shareit.Exception.ValidationException;
 import ru.practicum.shareit.user.Repository.UserRepository;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -46,7 +45,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto createUser(UserDto userDto) {
-        checkUserExistence(userDto.getEmail());
         log.info("Пользователь создан");
         User user = userRepository.save(UserMapper.toUser(userDto));
         return UserMapper.toUserDto(user);
@@ -70,15 +68,5 @@ public class UserServiceImpl implements UserService {
     public void delete(long userId) {
         log.info("Пользователь удален", userId);
         userRepository.findById(userId).ifPresent(userRepository::delete);
-    }
-
-    private void checkUserExistence(String email) {
-        List<User> users = userRepository.findAll();
-        boolean userExistence = users.stream()
-                .anyMatch(user -> user.getEmail().equals(email));
-        if (userExistence) {
-            log.warn("Пользователь уже существует");
-            throw new ValidationException("Пользователь уже существует");
-        }
     }
 }

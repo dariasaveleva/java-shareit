@@ -23,7 +23,7 @@ public class Comment {
     @JoinColumn(name = "item_id")
     Item item;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    User user;
+    @JoinColumn(name = "author_id")
+    User author;
     LocalDateTime created;
 }

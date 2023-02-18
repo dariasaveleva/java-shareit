@@ -26,7 +26,7 @@ public class BookingController {
     final String header = "X-Sharer-User-Id";
 
     @PostMapping
-    public BookingDtoResponse createBoooking(@RequestHeader(header) long id,
+    public BookingDtoResponse createBooking(@RequestHeader(header) long id,
                                              @Validated(Create.class) @RequestBody BookingDto bookingDto) {
         return bookingService.create(id, bookingDto);
     }
@@ -38,7 +38,7 @@ public class BookingController {
     }
 
     @GetMapping()
-    public List<BookingDtoResponse> getAllByBooker(@RequestHeader(header) long userId,
+    public List<BookingDtoResponse> getByBooker(@RequestHeader(header) long userId,
                                            @RequestParam(defaultValue = "ALL", required = false) String state) {
         return bookingService.getByBooker(userId, state);
     }

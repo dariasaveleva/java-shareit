@@ -13,26 +13,26 @@ import java.util.Optional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findAllByBookerIdOrderByStartTimeDesc(long userId);
+    List<Booking> findAllByBookerIdOrderByStartDesc(long userId);
 
     @Query("select booking from Booking booking " +
-            "where booking.startTime <?2 " +
-            "and booking.finishTime > ?2 " +
+            "where booking.start <?2 " +
+            "and booking.end > ?2 " +
             "and booking.booker.id = ?1 " +
-            "order by booking.startTime")
+            "order by booking.start")
     List<Booking> findByBookerCurrent(long userId, LocalDateTime now);
 
     @Query("select booking from Booking booking " +
-            "where booking.finishTime < ?2 " +
+            "where booking.end < ?2 " +
             "and booking.booker.id = ?1 " +
-            "order by booking.startTime desc")
-    List<Booking> findByBookerPast(long userId, LocalDateTime finishTime);
+            "order by booking.start desc")
+    List<Booking> findByBookerPast(long userId, LocalDateTime end);
 
     @Query("select booking from Booking booking " +
-            "where booking.startTime > ?2 " +
+            "where booking.start > ?2 " +
             "and booking.booker.id = ?1 " +
-            "order by booking.startTime desc")
-    List<Booking> findByBookerFuture(long userId, LocalDateTime startTime);
+            "order by booking.start desc")
+    List<Booking> findByBookerFuture(long userId, LocalDateTime start);
 
     @Query("select booking from Booking booking " +
             "where booking.status = ?2 " +
@@ -40,27 +40,27 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "order by booking.status desc")
     List<Booking> findByBookerAndStatus(long userId, BookingStatus status);
 
-    List<Booking> findByItemOwnerIdOrderByStartTimeDesc(long userId);
+    List<Booking> findByItemOwnerIdOrderByStartDesc(long ownerId);
 
     @Query("select booking from Booking booking " +
-            "where booking.startTime < ?2 " +
-            "and booking.finishTime > ?2 " +
+            "where booking.start < ?2 " +
+            "and booking.end > ?2 " +
             "and booking.item.owner.id = ?1 " +
-            "order by booking.startTime")
+            "order by booking.start")
     List<Booking> findByItemOwnerCurrent(long userId, LocalDateTime now);
 
     @Query("select booking from Booking booking " +
-            "where booking.finishTime < ?2 " +
+            "where booking.end < ?2 " +
             "and booking.item.owner.id = ?1 " +
-            "order by booking.startTime")
-    List<Booking> findByItemOwnerPast(long userId, LocalDateTime finishTime);
+            "order by booking.start desc")
+    List<Booking> findByItemOwnerPast(long userId, LocalDateTime end);
 
 
     @Query("select booking from Booking booking " +
-            "where booking.startTime > ?2 " +
+            "where booking.start > ?2 " +
             "and booking.item.owner.id = ?1 " +
-            "order by booking.startTime desc")
-    List<Booking> findByItemOwnerFuture(long userId, LocalDateTime startTime);
+            "order by booking.start desc")
+    List<Booking> findByItemOwnerFuture(long userId, LocalDateTime start);
 
     @Query("select booking from Booking booking " +
             "where booking.status = ?2 " +
@@ -68,22 +68,22 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "order by booking.status desc")
     List<Booking> findByItemOwnerAndStatus(long userId, BookingStatus status);
 
-    Optional<Booking> findByBookerIdAndItemIdAndFinishTimeBefore(long bookerId, long itemId, LocalDateTime finishTime);
+    Optional<Booking> findByBookerIdAndItemIdAndEndBefore(long bookerId, long itemId, LocalDateTime end);
 
     @Query("select distinct booking from Booking booking " +
-            "where booking.finishTime < :now " +
+            "where booking.end < :now " +
             "and booking.item.id in :ids " +
             "and booking.item.owner.id = :userId " +
-            "order by booking.startTime asc")
+            "order by booking.start asc")
     List<Booking> findBookingsLast(@Param("ids") List<Long> ids,
                                    @Param("now") LocalDateTime now,
                                    @Param("userId") long userId);
 
     @Query("select distinct booking from Booking booking " +
-            "where booking.startTime > :now " +
+            "where booking.start > :now " +
             "and booking.item.id in :ids " +
             "and booking.item.owner.id = :userId " +
-            "order by booking.startTime asc")
+            "order by booking.start asc")
     List<Booking> findBookingsNext(@Param("ids") List<Long> ids,
                                    @Param("now") LocalDateTime now,
                                    @Param("userId") long userId);

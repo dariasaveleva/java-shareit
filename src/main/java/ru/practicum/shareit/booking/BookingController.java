@@ -4,13 +4,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.user.Create;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -27,7 +26,7 @@ public class BookingController {
 
     @PostMapping
     public BookingDtoResponse createBooking(@RequestHeader(header) long id,
-                                             @Validated(Create.class) @RequestBody BookingDto bookingDto) {
+                                             @Valid @RequestBody BookingDto bookingDto) {
         return bookingService.create(id, bookingDto);
     }
 

@@ -24,4 +24,18 @@ public class ErrorHandler {
         return new ErrorResponse("Объект не найден 404", e.getMessage());
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerBadRequestException(final BadRequestException e) {
+        log.warn("400 {}", e.getMessage(), e);
+        return new ErrorResponse("Объект недоступен", e.getMessage());
+    }
+
+    @ExceptionHandler(UnsupportedStateException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handlerUnsupportedStatusException(final UnsupportedStateException e) {
+        log.warn("500 {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage(), e.getMessage());
+    }
+
 }

@@ -31,7 +31,7 @@ public class ItemController {
                                         @RequestParam (defaultValue = "0", required = false) int from,
                                         @PositiveOrZero
                                         @RequestParam (defaultValue = "20", required = false) int size) {
-        PageRequest page = PageRequest.of(from/size, size);
+        PageRequest page = PageRequest.of(from / size, size);
         return service.findAll(userId, page);
     }
 
@@ -46,7 +46,7 @@ public class ItemController {
                                 @RequestParam (defaultValue = "0", required = false) int from,
                                 @PositiveOrZero
                                 @RequestParam (defaultValue = "20", required = false) int size) {
-        PageRequest page = PageRequest.of(from/size, size);
+        PageRequest page = PageRequest.of(from / size, size);
         return service.searchItem(text, page);
     }
 

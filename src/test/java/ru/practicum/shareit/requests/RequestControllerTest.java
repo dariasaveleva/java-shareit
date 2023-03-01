@@ -45,7 +45,7 @@ class RequestControllerTest {
                 .content(objectMapper.writeValueAsBytes(itemRequestDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.requester_id").value(1L))
+                .andExpect(jsonPath("$.requesterId").value(1L))
                 .andExpect(jsonPath("$.description").value("нужна щетка для обуви"));
     }
 
@@ -60,7 +60,7 @@ class RequestControllerTest {
                 .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].requester_id").value(1L))
+                .andExpect(jsonPath("$[0].requesterId").value(1L))
                 .andExpect(jsonPath("$[0].description").value("нужна щетка для обуви"));
     }
 
@@ -75,7 +75,7 @@ class RequestControllerTest {
                 .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].requester_id").value(1L))
+                .andExpect(jsonPath("$[0].requesterId").value(1L))
                 .andExpect(jsonPath("$[0].description").value("нужна щетка для обуви"));
     }
 
@@ -89,7 +89,7 @@ class RequestControllerTest {
                         .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.requester_id").value(1L))
+                .andExpect(jsonPath("$.requesterId").value(1L))
                 .andExpect(jsonPath("$.description").value("нужна щетка для обуви"));
     }
 }

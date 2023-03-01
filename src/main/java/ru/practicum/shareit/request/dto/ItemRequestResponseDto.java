@@ -17,7 +17,7 @@ import java.util.List;
 @ToString
 public class ItemRequestResponseDto {
     Long id;
-    Long requester_id;
+    Long requesterId;
     @Size(groups = Create.class, min = 1, max = 200)
     String description;
     LocalDateTime created;

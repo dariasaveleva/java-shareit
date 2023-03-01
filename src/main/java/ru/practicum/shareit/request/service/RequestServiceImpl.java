@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor(onConstructor_= @Autowired)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestServiceImpl implements RequestService {
     final ItemRepository itemRepository;
@@ -67,7 +67,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ItemRequestResponseDto> getRequestsList(long userId, int from, int size) {
-        int page = from/size;
+        int page = from / size;
         PageRequest pageRequest = PageRequest.of(page, size);
         List<ItemRequestResponseDto> responseDtos = requestRepository.findAllPageable(userId, pageRequest)
                 .stream()

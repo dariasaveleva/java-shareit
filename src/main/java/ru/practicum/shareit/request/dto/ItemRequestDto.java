@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @ToString
 public class ItemRequestDto {
     Long id;
-    Long requester_id;
+    Long requesterId;
     @NotBlank
     @Size(groups = Create.class, min = 1, max = 200)
     String description;

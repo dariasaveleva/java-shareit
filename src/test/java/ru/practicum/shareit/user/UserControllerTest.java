@@ -44,6 +44,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[0].name").value("prince"))
                 .andExpect(jsonPath("$[0].email").value("prince@mail.ru"));
     }
+
     @Test
     public void getUserByIdTest() throws Exception {
         when(service.getUserById(anyLong())).thenReturn(userDto);

@@ -30,6 +30,7 @@ class CommentRepositoryTest {
     User user = test.getUser1();
     Comment comment = test.getComment();
     Item item = test.getItem1();
+
     @Test
     public void contextLoads() {
         assertNotNull(testEntityManager);

@@ -35,7 +35,7 @@ public class TestHelper {
 
     User user1 = new User(null, "user1", "user@mail.ru");
     User user2 = new User(null, "user2", "user2@mail.ru");
-    UserDto userDto = new UserDto (1L, "prince", "prince@mail.ru");
+    UserDto userDto = new UserDto(1L, "prince", "prince@mail.ru");
 
     //ITEM
     Item item = new Item(

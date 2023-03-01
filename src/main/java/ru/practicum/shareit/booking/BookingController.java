@@ -45,7 +45,7 @@ public class BookingController {
                                            @RequestParam(defaultValue = "ALL", required = false) String state,
                                            @PositiveOrZero @RequestParam (defaultValue = "0", required = false) int from,
                                            @PositiveOrZero @RequestParam (defaultValue = "20", required = false) int size) {
-        PageRequest page = PageRequest.of(from/size, size);
+        PageRequest page = PageRequest.of(from / size, size);
         return bookingService.getByBooker(userId, state, page);
     }
 
@@ -54,7 +54,7 @@ public class BookingController {
                                            @RequestParam(defaultValue = "ALL", required = false) String state,
                                            @PositiveOrZero @RequestParam (defaultValue = "0", required = false) int from,
                                            @PositiveOrZero @RequestParam (defaultValue = "20", required = false) int size) {
-        PageRequest page = PageRequest.of(from/size, size);
+        PageRequest page = PageRequest.of(from / size, size);
         return bookingService.getByOwner(userId, state, page);
     }
 

@@ -131,10 +131,10 @@ public class BookingServiceImpl implements BookingService {
                 bookings.addAll(bookingRepository.findByItemOwnerIdOrderByStartDesc(userId,page));
                 break;
             case "CURRENT":
-                bookings.addAll(bookingRepository.findByItemOwnerCurrent(userId, LocalDateTime.now() ,page));
+                bookings.addAll(bookingRepository.findByItemOwnerCurrent(userId, LocalDateTime.now(),page));
                 break;
             case "FUTURE":
-                bookings.addAll(bookingRepository.findByItemOwnerFuture(userId, LocalDateTime.now() ,page));
+                bookings.addAll(bookingRepository.findByItemOwnerFuture(userId, LocalDateTime.now(),page));
                 break;
             case "PAST":
                 bookings.addAll(bookingRepository.findByItemOwnerPast(userId, LocalDateTime.now(),page));

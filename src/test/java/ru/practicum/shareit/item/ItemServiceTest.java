@@ -51,6 +51,7 @@ public class ItemServiceTest {
     ArgumentCaptor<Item> itemArgumentCaptor;
 
     TestHelper test = new TestHelper();
+
     @Test
     public void findAllTest() {
         PageRequest page = PageRequest.of(0, 20);

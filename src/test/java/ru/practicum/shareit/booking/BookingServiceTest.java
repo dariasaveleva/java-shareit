@@ -50,7 +50,7 @@ class BookingServiceTest {
 
 
     @Test
-    public void CreateBookingTest() {
+    public void CreateTest() {
         Booking booking = BookingMapper.toBooking(bookingDto, item, user);
         BookingDto dto = BookingMapper.toBookingDto(booking);
         BookingDtoResponse bookingDtoResponse = BookingMapper.toBookingDtoResponse(booking);
@@ -67,7 +67,7 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowExceptionIfItemNotFound() {
+    public void ThrowException_IfItemNotFound() {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
         NotFoundException exception = assertThrows(NotFoundException.class,
                 () -> service.create(1L, bookingDto));
@@ -75,7 +75,7 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowExceptionIfUserNotFound() {
+    public void ThrowException_IfUserNotFound() {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.ofNullable(item));
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -85,7 +85,7 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowExceptionIfEndBeforeStart() {
+    public void ThrowException_IfEndBeforeStart() {
         Item item1 = item;
         item1.setId(5L);
         bookingDto.setItemId(5L);
@@ -100,7 +100,7 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowExceptionIfOwnerRejectBooking() {
+    public void ThrowException_IfOwnerRejectBooking() {
         Booking booking = BookingMapper.toBooking(bookingDto, item, user);
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
         when(bookingRepository.save(any())).thenReturn(booking);
@@ -112,12 +112,13 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowExceptionIfBookingNotFound() {
+    public void ThrowException_IfBookingNotFound() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
         NotFoundException exception = assertThrows(NotFoundException.class,
                 () -> service.changeStatus(1L, 1L, true));
         assertEquals("Такого бронирования нет", exception.getMessage());
     }
+
     @Test
     public void getByBookerAllState() {
         Booking booking = BookingMapper.toBooking(bookingDto, item, user);

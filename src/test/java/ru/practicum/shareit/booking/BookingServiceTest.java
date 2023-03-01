@@ -112,7 +112,7 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowException_IfBookingNotFound() {
+    public void throwException_IfBookingNotFound() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.empty());
         NotFoundException exception = assertThrows(NotFoundException.class,
                 () -> service.changeStatus(1L, 1L, true));

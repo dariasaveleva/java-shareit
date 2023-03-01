@@ -50,7 +50,7 @@ class BookingServiceTest {
 
 
     @Test
-    public void CreateTest() {
+    public void createTest() {
         Booking booking = BookingMapper.toBooking(bookingDto, item, user);
         BookingDto dto = BookingMapper.toBookingDto(booking);
         BookingDtoResponse bookingDtoResponse = BookingMapper.toBookingDtoResponse(booking);
@@ -67,7 +67,7 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowException_IfItemNotFound() {
+    public void throwException_IfItemNotFound() {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
         NotFoundException exception = assertThrows(NotFoundException.class,
                 () -> service.create(1L, bookingDto));
@@ -75,7 +75,7 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowException_IfUserNotFound() {
+    public void throwException_IfUserNotFound() {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.ofNullable(item));
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -85,7 +85,7 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowException_IfEndBeforeStart() {
+    public void throwException_IfEndBeforeStart() {
         Item item1 = item;
         item1.setId(5L);
         bookingDto.setItemId(5L);
@@ -100,7 +100,7 @@ class BookingServiceTest {
     }
 
     @Test
-    public void ThrowException_IfOwnerRejectBooking() {
+    public void throwException_IfOwnerRejectBooking() {
         Booking booking = BookingMapper.toBooking(bookingDto, item, user);
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
         when(bookingRepository.save(any())).thenReturn(booking);

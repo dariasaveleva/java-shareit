@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingDtoResponse {
     Long id;
@@ -21,5 +22,4 @@ public class BookingDtoResponse {
     Item item;
     User booker;
     BookingStatus status;
-
 }

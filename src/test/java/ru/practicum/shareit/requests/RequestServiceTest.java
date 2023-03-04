@@ -17,6 +17,7 @@ import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.request.service.RequestServiceImpl;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +39,8 @@ class RequestServiceTest {
     UserRepository userRepository;
     @InjectMocks
     RequestServiceImpl service;
+    @InjectMocks
+    UserServiceImpl userService;
     TestHelper test = new TestHelper();
 
     User user = test.getUser();
@@ -83,6 +86,15 @@ class RequestServiceTest {
     }
 
     @Test
+    void getOneRequestInfoTest_IfRequestNotFound() {
+        checkUserExistence();
+        when(requestRepository.findById(anyLong())).thenReturn(Optional.empty());
+        NotFoundException exception = assertThrows(NotFoundException.class, () ->
+                service.getOneRequestInfo(1L, 1L));
+        assertEquals("Запрос не существует", exception.getMessage());
+    }
+
+    @Test
     void getAllRequestsInfoTest() {
         checkUserExistence();
         List<ItemRequestResponseDto> requestsList = service.getAllRequestsInfo(user.getId());
@@ -91,11 +103,19 @@ class RequestServiceTest {
     }
 
     @Test
-    void getRequestsList() {
+    void getRequestsListTest() {
         when(requestRepository.findAllPageable(anyLong(), any())).thenReturn(Collections.singletonList(request));
 
         List<ItemRequestResponseDto> items = service.getRequestsList(1L, 0, 20);
         assertEquals(1, items.size());
         verify(requestRepository).findAllPageable(anyLong(), any());
+    }
+
+    @Test
+    public void checkUserExistenceTest() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        NotFoundException exception = assertThrows(NotFoundException.class, () ->
+                userService.getUserById(1L));
+        assertEquals("Пользователь не найден", exception.getMessage());
     }
 }

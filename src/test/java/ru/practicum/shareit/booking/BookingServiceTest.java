@@ -63,7 +63,27 @@ class BookingServiceTest {
         assertEquals(bookingDtoResponse, current);
         assertEquals(dto.getId(), bookingDto.getId());
         verify(bookingRepository).save(any());
+    }
 
+    @Test
+    public void createBookingByOwnerOfItem() {
+        when(itemRepository.findById(anyLong())).thenReturn(Optional.ofNullable(item));
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user));
+
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> service.create(1L, bookingDto));
+        assertEquals("Нельзя забронировать объект, которым владеете", exception.getMessage());
+    }
+
+    @Test
+    public void createBooking_IfItemNotAvailable() {
+        when(itemRepository.findById(anyLong())).thenReturn(Optional.ofNullable(item));
+        item.setAvailable(false);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(user));
+
+        BadRequestException exception =  assertThrows(BadRequestException.class,
+                () -> service.create(2L, bookingDto));
+        assertEquals("Объект недоступен", exception.getMessage());
     }
 
     @Test
@@ -117,6 +137,37 @@ class BookingServiceTest {
         NotFoundException exception = assertThrows(NotFoundException.class,
                 () -> service.changeStatus(1L, 1L, true));
         assertEquals("Такого бронирования нет", exception.getMessage());
+    }
+
+    @Test
+    public void throwException_IfChangeStatusNotByOwner() {
+        Booking booking = BookingMapper.toBooking(bookingDto, item, user);
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
+
+        NotFoundException exception = assertThrows(NotFoundException.class,
+                () -> service.changeStatus(2L, 1L, true));
+        assertEquals("Вы не владелец вещи", exception.getMessage());
+    }
+
+    @Test
+    public void throwException_ChangeStatus_IfBookingApproved() {
+        Booking booking = BookingMapper.toBooking(bookingDto, item, user);
+        booking.setStatus(BookingStatus.APPROVED);
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
+
+        BadRequestException exception = assertThrows(BadRequestException.class,
+                () -> service.changeStatus(1L, 1L, false));
+        assertEquals("Нельзя поменять статус у согласованного бронирования",
+                exception.getMessage());
+    }
+
+    @Test
+    public void getByIdIfUserNotFound() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(NotFoundException.class,
+                () -> service.getByBooker(1L, "ALL", page));
+        assertEquals("Пользователь не существует", exception.getMessage());
     }
 
     @Test
@@ -314,5 +365,48 @@ class BookingServiceTest {
         UnsupportedStateException exception =  assertThrows(UnsupportedStateException.class,
                 () -> service.getByOwner(user.getId(), "unsupported", page));
         assertEquals("Unknown state: unsupported", exception.getMessage());
+    }
+
+    @Test
+    public void getByOwnerIfUserNotExist() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> service.getByOwner(user.getId(), "ALL", page));
+        assertEquals("Пользователь не существует", exception.getMessage());
+    }
+
+    @Test
+    public void getBookingInfoTest() {
+        Booking booking = BookingMapper.toBooking(bookingDto,item, user);
+        when(bookingRepository.findById(bookingDto.getId()))
+                .thenReturn(Optional.of(booking));
+
+        BookingDtoResponse bookingDtoResponse = service.getBookingInfo(user.getId(), item.getId());
+        assertEquals(bookingDtoResponse.getItem(), booking.getItem());
+        assertEquals(bookingDtoResponse.getId(), booking.getId());
+        assertEquals(bookingDtoResponse.getStatus(), booking.getStatus());
+    }
+
+    @Test
+    public void getBookingInfoNotByOwner() {
+        Booking booking = BookingMapper.toBooking(bookingDto,item, user);
+        User user1 = new User(100L, "user1", "user1@mail.ru");
+        when(bookingRepository.findById(bookingDto.getId())).thenReturn(Optional.of(booking));
+
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> service.getBookingInfo(user1.getId(), booking.getId()));
+        assertEquals("Получить данные может только владелец или автор бронирования",
+                exception.getMessage());
+    }
+
+    @Test
+    public void getBookingInfoWhenBookingNotExist() {
+        Booking booking = BookingMapper.toBooking(bookingDto,item, user);
+        when(bookingRepository.findById(bookingDto.getId())).thenReturn(Optional.empty());
+
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> service.getBookingInfo(user.getId(), booking.getId()));
+        assertEquals("Такого бронирования нет", exception.getMessage());
     }
 }

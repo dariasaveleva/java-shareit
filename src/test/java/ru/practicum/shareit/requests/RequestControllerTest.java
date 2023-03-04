@@ -46,7 +46,7 @@ class RequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.requesterId").value(1L))
-                .andExpect(jsonPath("$.description").value("нужна щетка для обуви"));
+                .andExpect(jsonPath("$.description").value("description"));
     }
 
     @Test
@@ -61,7 +61,7 @@ class RequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].requesterId").value(1L))
-                .andExpect(jsonPath("$[0].description").value("нужна щетка для обуви"));
+                .andExpect(jsonPath("$[0].description").value("description"));
     }
 
     @Test
@@ -76,7 +76,7 @@ class RequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].requesterId").value(1L))
-                .andExpect(jsonPath("$[0].description").value("нужна щетка для обуви"));
+                .andExpect(jsonPath("$[0].description").value("description"));
     }
 
     @Test
@@ -90,6 +90,6 @@ class RequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.requesterId").value(1L))
-                .andExpect(jsonPath("$.description").value("нужна щетка для обуви"));
+                .andExpect(jsonPath("$.description").value("description"));
     }
 }

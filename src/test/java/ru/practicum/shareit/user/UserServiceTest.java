@@ -14,7 +14,6 @@ import ru.practicum.shareit.user.service.UserServiceImpl;
 import java.util.Collections;
 import java.util.Optional;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -75,6 +74,32 @@ class UserServiceTest {
     }
 
     @Test
+    public void throwException_updateItem_IfItemNotFound() {
+        UserDto userDtoUpdate = new UserDto(1L, "Updated", "update@mail.ru");
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> service.updateUser(1L, userDtoUpdate));
+        assertEquals("Пользователь не найден", exception.getMessage());
+    }
+
+    @Test
+    public void throwException_updateItem_IfNameAndEmailAreNull() {
+        User existedUser = new User(1L, "User", "user@mail.ru");
+        UserDto userDtoUpdate = new UserDto(1L, null, null);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(existedUser));
+        when(userRepository.save(existedUser)).thenReturn(UserMapper.toUser(userDtoUpdate));
+
+        UserDto currentUserDto = service.updateUser(1L, userDtoUpdate);
+        verify(userRepository).save(userArgumentCaptor.capture());
+        User saved = userArgumentCaptor.getValue();
+
+        assertEquals(currentUserDto.getId(), saved.getId());
+        assertNull(currentUserDto.getName());
+        assertNull(currentUserDto.getEmail());
+    }
+
+    @Test
     public void deleteUserTest() {
        when(userRepository.findById(1L)).thenReturn(Optional.of(new User()));
        service.delete(1L);
@@ -88,5 +113,4 @@ class UserServiceTest {
                 service.getUserById(0L));
         assertEquals("Пользователь не найден", exception.getMessage());
     }
-
 }

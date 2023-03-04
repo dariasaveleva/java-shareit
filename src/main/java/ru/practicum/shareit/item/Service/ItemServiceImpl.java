@@ -75,7 +75,7 @@ public class ItemServiceImpl implements ItemService {
            itemRepository.save(item);
            log.info("Объект обновлён");
        } else {
-           throw new NotFoundException("Объект не найден");
+           throw new NotFoundException("Изменить объект может только владелец");
        }
        return ItemMapper.toItemDto(item);
     }

@@ -15,6 +15,7 @@ import ru.practicum.shareit.comment.CommentMapper;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.comment.repository.CommentRepository;
+import ru.practicum.shareit.exception.BadRequestException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.Service.ItemServiceImpl;
 import ru.practicum.shareit.item.dto.BookingItemDto;
@@ -22,6 +23,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.model.Request;
+import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -45,6 +47,8 @@ public class ItemServiceTest {
     CommentRepository commentRepository;
     @Mock
     BookingRepository bookingRepository;
+    @Mock
+    RequestRepository requestRepository;
     @InjectMocks
     ItemServiceImpl itemService;
     @Captor
@@ -80,7 +84,6 @@ public class ItemServiceTest {
    @Test
     public void createItem() {
         User user = test.getUser();
-        Request request = test.getRequest();
         ItemDto itemDto = test.getItemDto();
         Item item = test.getItem();
 
@@ -90,6 +93,49 @@ public class ItemServiceTest {
         assertEquals(itemDto, currentItemDto);
         verify(itemRepository).save(item);
     }
+
+    @Test
+    public void throwException_CreateItem_IfUserNotExist() {
+        User user = test.getUser();
+        ItemDto itemDto = test.getItemDto();
+
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> itemService.createItem(user.getId(), itemDto));
+        assertEquals("Пользователь не существует", exception.getMessage());
+    }
+
+    @Test
+    public void throwException_IfCreateItemAndRequestNotExist() {
+        User user = test.getUser();
+        Item item = test.getItem2();
+        ItemDto itemDto = ItemMapper.toItemDto(item);
+        itemDto.setRequestId(2L);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(requestRepository.findById(2L)).thenReturn(Optional.empty());
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> itemService.createItem(1L, itemDto));
+        assertEquals("Запрос не найден", exception.getMessage());
+    }
+
+    @Test
+    public void createItemWithRequest() {
+        User user = test.getUser();
+        Request request = test.getRequest();
+        ItemDto itemDto = test.getItemDto();
+        itemDto.setRequestId(request.getId());
+        Item item = test.getItem();
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(itemRepository.save(item)).thenReturn(item);
+        ItemDto currentItemDto = itemService.createItem(1L, itemDto);
+        assertEquals(itemDto, currentItemDto);
+        assertEquals(request.getId(), currentItemDto.getRequestId());
+        verify(itemRepository).save(item);
+    }
+
+
 
     @Test
     public void updateItem() {
@@ -112,11 +158,41 @@ public class ItemServiceTest {
     }
 
     @Test
+    public void throwException_updateItem_IfItemNotFound() {
+        Item existedItem = test.getItem();
+        ItemDto newItem = test.getItemDto1();
+        when(itemRepository.findById(1L)).thenReturn(Optional.empty());
+
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> itemService.updateItem(1L, existedItem.getId(), newItem));
+        assertEquals("Объект не найден", exception.getMessage());
+    }
+
+    @Test
+    public void throwException_updateItemNotByOwner() {
+        Item existedItem = test.getItem();
+        ItemDto newItem = test.getItemDto1();
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(existedItem));
+
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> itemService.updateItem(2L, existedItem.getId(), newItem));
+        assertEquals("Изменить объект может только владелец", exception.getMessage());
+    }
+
+    @Test
     public void searchByTextTest() {
         when(itemRepository.searchByText(anyString(), any())).thenReturn(Collections.emptyList());
         PageRequest page = PageRequest.of(0, 20);
 
         List<ItemDto> current = itemService.searchItem("дрель", page);
+        assertTrue(current.isEmpty());
+    }
+
+    @Test
+    public void searchByBlankTextTest() {
+        PageRequest page = PageRequest.of(0, 20);
+
+        List<ItemDto> current = itemService.searchItem("", page);
         assertTrue(current.isEmpty());
     }
 
@@ -143,4 +219,55 @@ public class ItemServiceTest {
         assertEquals(comment.getText(), current.getText());
         assertEquals(comment.getAuthor().getName(), current.getAuthorName());
     }
+
+    @Test
+    public void throwException_addComment_IfUserNotFound() {
+        User user = test.getUser();
+        CommentDto commentDto = test.getCommentDto();
+        commentDto.setId(1L);
+        commentDto.setText("Отличная дрель для любых поверхностей");
+        commentDto.setAuthorName(user.getName());
+
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> itemService.addComment(user.getId(), 1L, commentDto));
+        assertEquals("Пользователь не найден", exception.getMessage());
+    }
+
+    @Test
+    public void throwException_addComment_IfItemNotFound() {
+        User user = test.getUser();
+        CommentDto commentDto = test.getCommentDto();
+        commentDto.setId(1L);
+        commentDto.setText("Отличная дрель для любых поверхностей");
+        commentDto.setAuthorName(user.getName());
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(itemRepository.findById(1L)).thenReturn(Optional.empty());
+
+        NotFoundException exception =  assertThrows(NotFoundException.class,
+                () -> itemService.addComment(user.getId(), 1L, commentDto));
+        assertEquals("Объект не найден", exception.getMessage());
+    }
+
+    @Test
+    public void throwException_IfAddComment_NotByBooker() {
+        User user = test.getUser();
+        User user1 = new User(2L, "user2", "user2@mail.ru");
+        Item item = test.getItem();
+        CommentDto commentDto = test.getCommentDto();
+        commentDto.setId(1L);
+        commentDto.setText("Отличная дрель для любых поверхностей");
+        commentDto.setAuthorName(user.getName());
+
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user1));
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
+
+        BadRequestException exception =  assertThrows(BadRequestException.class,
+                () -> itemService.addComment(2L, 1L, commentDto));
+        assertEquals("Невозможно добавить коммент", exception.getMessage());
+    }
+
+
 }

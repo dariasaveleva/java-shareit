@@ -53,14 +53,15 @@ public class TestHelper {
             true,
             user,
             null);
+
     ItemRequestDto itemRequestDto = new ItemRequestDto(
             1L,
             1L,
-            "нужна щетка для обуви",
+            "description",
             LocalDateTime.now()
     );
 
-    ItemDto itemDto = ItemMapper.toItemDto(item);
+    ItemDto itemDto = new ItemDto(1L, "name", "description", true, null);
 
     ItemDto itemDto1 = new ItemDto(1L, "new name", "new description", true, null);
     BookingItemDto bookingItemDto = ItemMapper.toBookingItemDto(item);
@@ -70,8 +71,16 @@ public class TestHelper {
 
     //REQUEST
     Request request = new Request(null, user, "description", LocalDateTime.now());
+    Request request1 = new Request(1L, user, "description", LocalDateTime.now());
 
-    Request request1 = RequestMapper.toRequest(itemRequestDto, user);
+    Item item2 = new Item(
+            3L,
+            "name1",
+            "description1",
+            true,
+            user,
+            request1);
+
 
     //COMMENT
     CommentDto commentDto = new CommentDto();

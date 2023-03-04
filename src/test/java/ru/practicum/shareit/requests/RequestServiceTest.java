@@ -91,7 +91,7 @@ class RequestServiceTest {
         when(requestRepository.findById(anyLong())).thenReturn(Optional.empty());
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
                 service.getOneRequestInfo(1L, 1L));
-        assertEquals("Запрос не существует", exception.getMessage());
+        assertEquals("Запрос c id 1 не существует", exception.getMessage());
     }
 
     @Test

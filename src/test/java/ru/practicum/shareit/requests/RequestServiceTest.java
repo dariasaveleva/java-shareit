@@ -66,10 +66,10 @@ class RequestServiceTest {
 
     @Test
     void throwExceptionTest() {
-        when(userRepository.findById(anyLong())).thenThrow(new NotFoundException("Пользователь не найден"));
+        when(userRepository.findById(anyLong())).thenThrow(new NotFoundException("Пользователь с id " + 1 + " не найден"));
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
                 service.getAllRequestsInfo(1L));
-        assertEquals("Пользователь не найден", exception.getMessage());
+        assertEquals("Пользователь с id 1 не найден", exception.getMessage());
     }
 
     @Test
@@ -116,6 +116,6 @@ class RequestServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
                 userService.getUserById(1L));
-        assertEquals("Пользователь не найден", exception.getMessage());
+        assertEquals("Пользователь с id 1 не найден", exception.getMessage());
     }
 }

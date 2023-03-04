@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
                 log.warn("Пользователь не найден");
-        throw new NotFoundException("Пользователь не найден");
+        throw new NotFoundException("Пользователь с id " + userId + " не найден");
         });
         return UserMapper.toUserDto(user);
     }
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(long userId, UserDto userDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
             log.warn("Пользователь не найден");
-            throw new NotFoundException("Пользователь не найден");
+            throw new NotFoundException("Пользователь с id " + userId + " не найден");
         });
         if (userDto.getEmail() != null) user.setEmail(userDto.getEmail());
         if (userDto.getName() != null) user.setName(userDto.getName());

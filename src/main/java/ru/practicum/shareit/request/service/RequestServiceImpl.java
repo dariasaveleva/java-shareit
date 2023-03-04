@@ -56,7 +56,7 @@ public class RequestServiceImpl implements RequestService {
     public ItemRequestResponseDto getOneRequestInfo(long userId, long requestId) {
         checkUserExistence(userId);
         Request request = requestRepository.findById(requestId).orElseThrow(() ->
-                new NotFoundException("Запрос не существует"));
+                new NotFoundException("Запрос c id " + requestId +  " не существует"));
         List<ItemDto> items = itemRepository.searchByItemRequestId(requestId).stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
@@ -91,7 +91,7 @@ public class RequestServiceImpl implements RequestService {
 
     private User checkUserExistence(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException("Пользователь не существует"));
+                new NotFoundException("Пользователь c id " + userId +  " не существует"));
         return user;
     }
 }

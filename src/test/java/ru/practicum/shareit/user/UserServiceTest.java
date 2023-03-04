@@ -74,13 +74,13 @@ class UserServiceTest {
     }
 
     @Test
-    public void throwException_updateItem_IfItemNotFound() {
+    public void throwException_updateItem_IfUserNotFound() {
         UserDto userDtoUpdate = new UserDto(1L, "Updated", "update@mail.ru");
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         NotFoundException exception =  assertThrows(NotFoundException.class,
                 () -> service.updateUser(1L, userDtoUpdate));
-        assertEquals("Пользователь не найден", exception.getMessage());
+        assertEquals("Пользователь с id " + userDtoUpdate.getId() + " не найден", exception.getMessage());
     }
 
     @Test
@@ -111,6 +111,6 @@ class UserServiceTest {
         when(userRepository.findById(0L)).thenReturn(Optional.empty());
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
                 service.getUserById(0L));
-        assertEquals("Пользователь не найден", exception.getMessage());
+        assertEquals(("Пользователь с id 0 не найден"), exception.getMessage());
     }
 }

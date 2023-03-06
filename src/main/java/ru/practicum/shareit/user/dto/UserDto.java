@@ -1,9 +1,6 @@
 package ru.practicum.shareit.user.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.user.Create;
 import ru.practicum.shareit.user.Update;
@@ -16,6 +13,8 @@ import javax.validation.constraints.NotNull;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class UserDto {
     Long id;
     @NotBlank(groups = Create.class)

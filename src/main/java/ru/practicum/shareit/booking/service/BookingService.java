@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.service;
 
-import ru.practicum.shareit.Exception.UnsupportedStateException;
+import org.springframework.data.domain.Pageable;
+import ru.practicum.shareit.exception.UnsupportedStateException;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 
@@ -13,8 +14,8 @@ public interface BookingService {
 
     BookingDtoResponse getBookingInfo(long userId, long bookingId);
 
-    List<BookingDtoResponse> getByBooker(long userId, String state);
+    List<BookingDtoResponse> getByBooker(long userId, String state, Pageable page); //add pageable
 
-    List<BookingDtoResponse> getByOwner(long userId, String state) throws UnsupportedStateException;
+    List<BookingDtoResponse> getByOwner(long userId, String state, Pageable page) throws UnsupportedStateException; //add pageable
 
 }

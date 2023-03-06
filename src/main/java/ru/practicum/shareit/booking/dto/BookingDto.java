@@ -23,9 +23,9 @@ import java.time.LocalDateTime;
 public class BookingDto {
     @NotNull(groups = Update.class)
     Long id;
-    @FutureOrPresent//(groups = Create.class)
+    @FutureOrPresent
     LocalDateTime start;
-    @Future//(groups = Create.class)
+    @Future
     LocalDateTime end;
     @NotNull(groups = Create.class)
     Long itemId;

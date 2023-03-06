@@ -1,9 +1,10 @@
 package ru.practicum.shareit.item.Service;
 
 import ru.practicum.shareit.item.dto.BookingItemDto;
-import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ItemService {
@@ -13,9 +14,9 @@ public interface ItemService {
 
     BookingItemDto findItem(long userId, long itemId);
 
-    List<BookingItemDto> findAll(long userId);
+    List<BookingItemDto> findAll(long userId, Pageable page); // add pageable
 
-    List<ItemDto> searchItem(String text);
+    List<ItemDto> searchItem(String text, Pageable page); // add pageable
 
     CommentDto addComment(long userId, long itemId, CommentDto commentDto);
 }

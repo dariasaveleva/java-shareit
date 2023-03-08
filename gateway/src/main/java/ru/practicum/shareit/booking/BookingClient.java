@@ -29,7 +29,7 @@ public class BookingClient extends BaseClient {
 
     public ResponseEntity<Object> create(long userId, BookingDto bookingDto) {
         if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
-            throw new BadRequestException("Неверное время для бронирония");
+            throw new BadRequestException("Время окончания бронирования не может быть раньше времени начала бронирования");
         }
         return post("", userId, bookingDto);
     }

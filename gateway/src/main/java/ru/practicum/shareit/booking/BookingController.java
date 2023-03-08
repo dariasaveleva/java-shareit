@@ -22,7 +22,7 @@ import javax.validation.constraints.PositiveOrZero;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingController {
 
-    final BookingClient client;
+    private final BookingClient client;
     final String header = "X-Sharer-User-Id";
 
     @PostMapping
